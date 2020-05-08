@@ -1,5 +1,5 @@
 # SpaceGame
-A sideways-shooting space adventure game using Python with the PyGame library.
+A sideways-shooting space adventure game titled 'Mission X' using Python with the PyGame library.
 
 Built with Python Version 3.8.1 and Pygame 2.0.0.dev6 during the spring/summer of 2020.
 Requires python and pygame to run.
