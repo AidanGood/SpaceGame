@@ -37,7 +37,7 @@ class Adventure:
         # Start storing game statistics
         self.stats = GameStats( self )
 
-        # attach appropriate groups to respective variables
+        # Attach appropriate groups to respective variables
         self.ship = Ship( self )
         self.rockets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
