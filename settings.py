@@ -13,7 +13,7 @@ class Settings:
         self.bg_color = ( 230, 230, 230 )
         # Ship settings
         self.ship_speed = 4
-        self.num_lives = 3
+        self.life_limit = 3
         # Rocket settings
         self.rocket_velocity = 0.75
         self.rocket_acceleration = 0.1

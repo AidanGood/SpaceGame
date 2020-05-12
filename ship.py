@@ -9,7 +9,6 @@ class Ship:
     def __init__( self, game ):
         """Create the ship and it's attributes"""
 
-        
         self.screen = game.screen
         self.screen_rect = game.screen.get_rect()
         self.settings = game.settings
@@ -41,4 +40,10 @@ class Ship:
             self.y += self.settings.ship_speed
 
         self.rect.y = self.y
+
+    def center( self ):
+        """ Puts ship back at starting position """
+        
+        self.rect.midleft = self.screen_rect.midleft
+        self.y = float(self.rect.y)
         

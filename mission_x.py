@@ -1,5 +1,6 @@
 '''
 Author: Aidan Good
+Spring 2020
 Based on Python Crash Course project by Eric Matthes
 
 Main file that will initialize and handle running the game
@@ -7,41 +8,71 @@ Main file that will initialize and handle running the game
 import sys
 import pygame
 import random
+import time
+
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from rocket import Rocket
 from alien import Alien
 
 class Adventure:
-    """Overarching class to manage assets and behaviors"""
+    ''' Overarching class to manage assets and behaviors '''
 
     def __init__( self ):
-        """Start up the game window and intialize game resources"""
+        ''' Start up the game window and intialize game resources '''
         
         pygame.init()
-        
+
+        # Get game settings
         self.settings = Settings()
-        
-        self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+
+        # Set up the display
+        self.screen = pygame.display.set_mode( (0,0), pygame.FULLSCREEN )
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption( "Mission X" )
 
+        # Start storing game statistics
+        self.stats = GameStats( self )
+
+        # attach appropriate groups to respective variables
         self.ship = Ship( self )
         self.rockets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
 
     def start_game( self ):
-        """Begin main loop"""
+        ''' Begin main loop '''
         while True:
             self.check_inputs()
-            self.ship.moving()
-            self.rocket_update()
-            self.create_alien()
-            self.alien_update()
+
+            if self.stats.game_active:
+                self.ship.moving()
+                self.rocket_update()
+                self.create_alien()
+                self.alien_update()
+                
             self.draw_screen()
 
+    def ship_impact( self ):
+        ''' When the ship gets hit by an object '''
+        # Remove 1 life
+        if self.stats.lives_left > 0:
+
+            self.stats.lives_left -= 1
+            # Remove all on-screen objects
+            self.aliens.empty()
+            self.rockets.empty()
+            # Move ship back to starting position
+            self.ship.center()
+            # Pause the game
+            time.sleep(0.5)
+            
+        else:
+            self.stats.game_active = False
+
     def alien_update( self ):
+        ''' Handle interactions with alien ships '''
         self.aliens.update()
 
         # Remove aliens that reach right end of screen
@@ -51,7 +82,7 @@ class Adventure:
 
         # Check for collisions with player ship
         if pygame.sprite.spritecollideany( self.ship, self.aliens ):
-            
+            self.ship_impact()
 
     def create_alien( self ):
         if len( self.aliens ) < self.settings.num_aliens:
@@ -60,7 +91,7 @@ class Adventure:
                 self.aliens.add( newAlien )
         
     def rocket_update( self ):
-        """Handles moving rockets"""
+        """ Handles moving rockets """
         
         self.rockets.update()
         
@@ -73,20 +104,20 @@ class Adventure:
         alien_collisions = pygame.sprite.groupcollide(
             self.rockets, self.aliens, True, True )
 
-        #ADD asteroids
+        '''TODO: Add asteroids'''
 
         
 
     
     def fire_rocket( self ):
-        """Handles firing and tracking # of rockets"""
+        """ Handles firing and tracking # of rockets on screen """
         if len( self.rockets ) < self.settings.num_rockets:
             newRocket = Rocket( self )
             self.rockets.add( newRocket )
             
 
     def check_inputs( self ):
-        """Watch for keyboard commands and respond"""
+        """ Watch for keyboard commands and respond """
             
         for event in pygame.event.get():
             # Quit if game is exited
@@ -101,7 +132,7 @@ class Adventure:
                 self.keyup_check( event )
 
     def userquit_game( self, event ):
-        """Manages user quitting the game"""
+        """ Manages user quitting the game """
         
         # Quit if game is exited
         if event.type == pygame.QUIT:
@@ -109,7 +140,7 @@ class Adventure:
             sys.exit()
         
     def keydown_check( self, event ):
-        """Handles the user pressing a key"""
+        """ Handles keypresses """
         
         # Upward movement inputs - up or left arrow key 
         if event.key == pygame.K_LEFT or event.key == pygame.K_UP:
@@ -129,7 +160,7 @@ class Adventure:
             sys.exit()
             
     def keyup_check( self, event ):
-        """Handles the user releasing key"""
+        """ Handles the user releasing key """
         
         # Stop upward movement when user stops pressing key down
         if event.key == pygame.K_LEFT or event.key == pygame.K_UP:
@@ -140,12 +171,12 @@ class Adventure:
             self.ship.moving_down = False
 
     def draw_screen( self ):
-        """Handles updating the display"""
+        """ Handles updating the display """
         
         self.screen.fill( self.settings.bg_color )
-        self.rockets.draw(self.screen)
+        self.rockets.draw( self.screen )
         self.ship.draw()
-        self.aliens.draw(self.screen)
+        self.aliens.draw( self.screen )
             
         pygame.display.flip()
 
