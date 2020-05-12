@@ -15,6 +15,7 @@ from game_stats import GameStats
 from ship import Ship
 from rocket import Rocket
 from alien import Alien
+from button import Button
 
 class Adventure:
     ''' Overarching class to manage assets and behaviors '''
@@ -40,6 +41,9 @@ class Adventure:
         self.ship = Ship( self )
         self.rockets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+
+        # Make play button
+        self.play_button = Button( self, 'Play' )
 
     def start_game( self ):
         ''' Begin main loop '''
@@ -177,6 +181,9 @@ class Adventure:
         self.rockets.draw( self.screen )
         self.ship.draw()
         self.aliens.draw( self.screen )
+
+        if not self.stats.game_active:
+            self.play_button.draw_button()
             
         pygame.display.flip()
 
