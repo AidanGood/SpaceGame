@@ -16,13 +16,14 @@ from ship import Ship
 from rocket import Rocket
 from alien import Alien
 from button import Button
+from star import Star
 
 
 class Adventure:
     """ Overarching class to manage assets and behaviors """
 
     def __init__(self):
-        """ Start up the game window and intialize game resources """
+        """ Start up the game window and initialize game resources """
 
         pygame.init()
 
@@ -42,12 +43,14 @@ class Adventure:
         self.ship = Ship(self)
         self.rockets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+        self.stars = pygame.sprite.Group()
 
         # Make play button
         self.play_button = Button(self, 'Play')
 
     def start_game(self):
         """ Begin main loop """
+
         while True:
             self.check_inputs()
 
@@ -56,11 +59,14 @@ class Adventure:
                 self.rocket_update()
                 self.create_alien()
                 self.alien_update()
+                self.create_stars()
+                self.star_update()
 
             self.draw_screen()
 
     def ship_impact(self):
         """ When the ship gets hit by an object """
+
         # Remove 1 life
         if self.stats.lives_left > 0:
 
@@ -78,6 +84,7 @@ class Adventure:
 
     def alien_update(self):
         """ Handle interactions with alien ships """
+
         self.aliens.update()
 
         # Remove aliens that reach right end of screen
@@ -89,11 +96,30 @@ class Adventure:
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self.ship_impact()
 
+    def star_update(self):
+        """Make the stars move across the screen"""
+
+        self.stars.update()
+
+        # Remove stars that reach right end of screen
+        for star in self.stars.copy():
+            if star.rect.right <= 0:
+                self.aliens.remove(star)
+
     def create_alien(self):
+        """Create aliens randomly and ensure that no more than the max appear on screen at once"""
+
         if len(self.aliens) < self.settings.num_aliens:
             if random.random() < self.settings.alien_rate:
                 newAlien = Alien(self)
                 self.aliens.add(newAlien)
+
+    def create_stars(self):
+        """Create stars randomly"""
+
+        if random.random() < self.settings.star_rate:
+            newStar = Star(self)
+            self.stars.add(newStar)
 
     def rocket_update(self):
         """ Handles moving rockets """
@@ -175,9 +201,11 @@ class Adventure:
         """ Handles updating the display """
 
         self.screen.fill(self.settings.bg_color)
+        self.stars.draw(self.screen)
         self.rockets.draw(self.screen)
         self.ship.draw()
         self.aliens.draw(self.screen)
+
 
         if not self.stats.game_active:
             self.play_button.draw_button()

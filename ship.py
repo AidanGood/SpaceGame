@@ -21,6 +21,7 @@ class Ship:
         # Position the ship at the center-left side of the screen at start
         self.rect.midleft = self.screen_rect.midleft
         self.y = float(self.rect.y)
+        self.rect.x = float(self.rect.x) + 20
 
         # Movement flags
         self.moving_up = False
@@ -32,11 +33,11 @@ class Ship:
         self.screen.blit(self.image, self.rect)
 
     def moving(self):
-        """Manages moving ship up and down based on flags"""
+        """Manages moving the ship up and down on the screen"""
 
-        if self.moving_up == True and self.rect.top - 3 > self.screen_rect.top:
+        if self.moving_up is True and self.rect.top - 3 > self.screen_rect.top:
             self.y -= self.settings.ship_speed
-        if self.moving_down == True and self.rect.bottom + 3 < \
+        if self.moving_down is True and self.rect.bottom + 200 < \
                 self.screen_rect.bottom:
             self.y += self.settings.ship_speed
 

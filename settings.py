@@ -2,7 +2,6 @@
 Author: Aidan Good
 Based on Python Crash Course project by Eric Matthes
 '''
-import pygame
 
 
 class Settings:
@@ -10,9 +9,9 @@ class Settings:
 
     def __init__(self):
         # Display settings
-        self.screen_width = (1200)
-        self.screen_height = (800)
-        self.bg_color = (230, 230, 230)
+        self.screen_width = 1200
+        self.screen_height = 800
+        self.bg_color = (0, 0, 0)  # Black
         # Ship settings
         self.ship_speed = 4
         self.life_limit = 3
@@ -24,6 +23,9 @@ class Settings:
         self.rocket_color = (60, 60, 60)
         self.num_rockets = 5
         # Alien settings
-        self.alien_velocity = 2
+        self.alien_velocity = 3
         self.alien_rate = 0.01  # anything below 0.05 seems good
-        self.num_aliens = 6
+        self.num_aliens = 6     # Maximum number of aliens on screen
+        # Star settings
+        self.star_velocity = 0.5
+        self.star_rate = 0.007
