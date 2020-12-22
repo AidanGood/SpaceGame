@@ -1,6 +1,5 @@
 '''
 Author: Aidan Good
-Based on Python Crash Course project by Eric Matthes
 '''
 
 
@@ -24,8 +23,8 @@ class Settings:
         self.num_rockets = 5
         # Alien settings
         self.alien_velocity = 3
-        self.alien_rate = 0.01  # anything below 0.05 seems good
-        self.num_aliens = 6     # Maximum number of aliens on screen
+        self.alien_rate = 0.01  # Base: 0.01, anything below 0.05 seems good
+        self.num_aliens = 6     # Base: 6, Maximum number of aliens on screen
         # Star settings
         self.star_velocity = 0.5
         self.star_rate = 0.007

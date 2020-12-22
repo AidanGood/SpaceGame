@@ -1,6 +1,5 @@
 '''
 Author: Aidan Good
-Based on Python Crash Course project by Eric Matthes
 '''
 import pygame
 from pygame.sprite import Sprite
@@ -22,7 +21,7 @@ class Alien(Sprite):
 
         # Place alien randomly on right side of screen
         self.rect.x = game.settings.screen_width
-        self.rect.y = random.randint(0, game.settings.screen_height - 200)
+        self.rect.y = random.randint(0, game.settings.screen_height - 270)
 
         self.x = float(self.rect.x)
 

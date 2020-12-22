@@ -1,6 +1,5 @@
 '''
 Author: Aidan Good
-Based on Python Crash Course project by Eric Matthes
 '''
 import pygame
 from pygame.sprite import Sprite

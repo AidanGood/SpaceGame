@@ -1,7 +1,5 @@
 '''
 Author: Aidan Good
-Spring 2020
-Inspired by the Python Crash Course project by Eric Matthes
 
 Main file that will initialize and handle running the game
 '''
@@ -17,10 +15,11 @@ from rocket import Rocket
 from alien import Alien
 from button import Button
 from star import Star
+from console import Console
 
 
 class Adventure:
-    """ Overarching class to manage assets and behaviors """
+    """ Overarching class to manage game logic and behaviors """
 
     def __init__(self):
         """ Start up the game window and initialize game resources """
@@ -35,6 +34,7 @@ class Adventure:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Mission X")
+        self.console = Console(self)
 
         # Start storing game statistics
         self.stats = GameStats(self)
@@ -49,7 +49,9 @@ class Adventure:
         self.play_button = Button(self, 'Play')
 
     def start_game(self):
-        """ Begin main loop """
+        """ Begin game logic loop """
+
+        self.create_background_stars()
 
         while True:
             self.check_inputs()
@@ -104,7 +106,7 @@ class Adventure:
         # Remove stars that reach right end of screen
         for star in self.stars.copy():
             if star.rect.right <= 0:
-                self.aliens.remove(star)
+                self.stars.remove(star)
 
     def create_alien(self):
         """Create aliens randomly and ensure that no more than the max appear on screen at once"""
@@ -119,6 +121,11 @@ class Adventure:
 
         if random.random() < self.settings.star_rate:
             newStar = Star(self)
+            self.stars.add(newStar)
+
+    def create_background_stars(self):
+        for i in range(20):
+            newStar = Star(self, 1)
             self.stars.add(newStar)
 
     def rocket_update(self):
@@ -201,11 +208,11 @@ class Adventure:
         """ Handles updating the display """
 
         self.screen.fill(self.settings.bg_color)
+        self.console.draw()
         self.stars.draw(self.screen)
         self.rockets.draw(self.screen)
         self.ship.draw()
         self.aliens.draw(self.screen)
-
 
         if not self.stats.game_active:
             self.play_button.draw_button()

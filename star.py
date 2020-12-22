@@ -10,7 +10,7 @@ from pygame.sprite import Sprite
 class Star(Sprite):
     """The stars that move in the background"""
 
-    def __init__(self, game):
+    def __init__(self, game, x=0):
         """Create the star and set position randomly along y-axis"""
         super().__init__()
         self.game = game
@@ -21,9 +21,13 @@ class Star(Sprite):
         self.image = pygame.image.load('images/star.png')
         self.rect = self.image.get_rect()
 
-        # Place stars randomly on right side of screen
-        self.rect.x = game.settings.screen_width
-        self.rect.y = random.randint(0, game.settings.screen_height - 200)
+        if x == 0:      # Stars generated after game start
+            # Place stars randomly on right side of screen
+            self.rect.x = game.settings.screen_width
+            self.rect.y = random.randint(0, game.settings.screen_height - 200)
+        else:           # Stars generated at game start
+            self.rect.x = random.randint(0, game.settings.screen_width)
+            self.rect.y = random.randint(0, game.settings.screen_height - 200)
 
         self.x = float(self.rect.x)
 
